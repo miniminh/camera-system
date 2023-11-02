@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <div class="container">
+            <h3> Live Streaming {{ gender }} content</h3>
+            <img src="{{ url_for('video_feed') }}" width="50%">
+        </div>
+        <a href="/changegender"><button type="button">Change Gender</button></a>
+    </body>
+    
+</html>

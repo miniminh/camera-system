@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Python Dict Values</title>
+</head>
+<body>
+  <h1>Python Dict Values</h1>
+
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Gender</th>
+        <th>Videos</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for gender in file_list.keys(): %}
+        <tr>
+          <td>{{ gender }}</td>
+          <td>
+            {% for video in file_list[gender] %}
+              <a>{{ video }}</a><br>
+            {% endfor %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <form action="{{ url_for('play') }}">
+    <button>Play slideshow</button>  
+ </form>
+</body>
+</html>

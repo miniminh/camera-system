@@ -34,7 +34,7 @@ csv_file.close()
 
 save_dir = 'X:/ANHTAI/camera_system/save/'
 
-THRESHOLD = 0.75
+THRESHOLD = 0.5
 
 # IM_W = 1600
 # IM_H = 1200
@@ -44,7 +44,7 @@ IM_H = 1080
 
 THRESHOLD1 = THRESHOLD * IM_W
 
-THRESHOLD2 = THRESHOLD1 + 5
+THRESHOLD2 = THRESHOLD1 + 10
 
 FACE_W = FACE_H = 198
 
@@ -53,3 +53,6 @@ checkpoint_path = 'X:/ANHTAI/camera_system/model_checkpoint'
 max_age = 64
 
 SIMILAR_THRESHOLD = 10
+
+video_path = 0
+video_path = "X:/ANHTAI/camera_system/test_case/test_case.mp4"

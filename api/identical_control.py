@@ -16,6 +16,7 @@ def loop_all():
         for file in files:
             f = os.path.join(root, file)
             date_object = datetime.strptime(f[len(save_dir):-15], "%d_%m_%Y_%H_%M_%S")
+            print(date_object)
             if timeout(date_object):
                 os.remove(f)
 

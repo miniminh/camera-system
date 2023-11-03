@@ -23,11 +23,13 @@ def gen_frames():
     cam_gen = get_cam()
     while True:
         new_gender = get_gender()
+        while new_gender == '': 
+            new_gender = get_gender()
+            time.sleep(1)
         if new_gender != gender:
             if gender != 'null':
                 RedirectResponse("http://127.0.0.1:8000/play", status_code=status.HTTP_303_SEE_OTHER)
             gender = new_gender
-            cam_gen = get_cam()
             camera = next(cam_gen)
             cap = cv2.VideoCapture(camera)
             

@@ -4,11 +4,10 @@ import time
 import numpy as np
 
 from object_detection import track, check_pass, save
-from utils import IM_H, IM_W, log, csv_file, distance
+from utils import IM_H, IM_W, log, csv_file, distance, video_path
 from choose import make_choice
 
-video_path = 0
-video_path = "X:/ANHTAI/camera_system/test_case/test_case.mp4"
+
 live_cap = cv2.VideoCapture(video_path)
 camera = cv2.VideoCapture('X:/ANHTAI/camera_system/api/uploads/ezin.mp4', cv2.CAP_DSHOW)
 
@@ -45,6 +44,9 @@ while live_cap.isOpened():
                 is_pass, is_in = check_pass(box, track_id, track_history)
                 
                 if is_pass: 
+                    # if right to left is in 
+                    is_in = not is_in
+                    
                     age, gender, feature = save(box, frame, is_in)
                     
                     if is_in:
@@ -72,6 +74,9 @@ while live_cap.isOpened():
                     CAMERA = make_choice(cnt_gender)
                     with open('camera/camera.txt', 'w') as f:
                         f.write(CAMERA)
+                else:
+                    with open('camera/camera.txt', 'w') as f:
+                        f.write('')
                         
             cv2.putText(annotated_frame, f'{cnt_in - cnt_out}', (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 1, 2)
             cv2.imshow("test", annotated_frame)

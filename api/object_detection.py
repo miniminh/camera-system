@@ -2,7 +2,7 @@ from ultralytics import YOLO
 import numpy as np
 
 from utils import THRESHOLD1, THRESHOLD2, save_dir, generate_temp_filename
-from age_gender import predict, get_feature, already_in
+from age_gender import predict, get_feature
 
 model = YOLO('yolov8n.pt')
 
@@ -35,10 +35,10 @@ def save(box, frame, is_in):
     
     feature = get_feature(crop_frame)
     if is_in: 
-        filename = generate_temp_filename()
+        id, filename = generate_temp_filename()
         filename = save_dir + filename
         np.save(filename, feature)
         age, gender = predict(feature)
-        return age, gender, feature
+        return id, age, gender, feature
     else:
-        return None, None, feature
+        return None, None, None, feature

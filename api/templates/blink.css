@@ -1,0 +1,7 @@
+.dataframe td {
+    background-color: white;
+  }
+  
+  .dataframe td.updated {
+    background-color: yellow;
+  }

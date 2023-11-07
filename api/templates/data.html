@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSV File Display</title>
+  <style> 
+    .updated {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    var ws = new WebSocket("ws://localhost:8000/ws_data");
+
+    function createArray(length) {
+      var arr = new Array(length || 0),
+          i = length;
+  
+      if (arguments.length > 1) {
+          var args = Array.prototype.slice.call(arguments, 1);
+          while(i--) arr[length-1 - i] = createArray.apply(this, args);
+      }
+  
+      return arr;
+    }
+
+    var prev = createArray(100,5)
+
+    ws.onmessage = function() {
+      var rows = JSON.parse(event.data);
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        for (var j = 0; j < row.length; j++) {
+          var cell = row[j];
+        }
+      }
+
+      // Update the table with the new rows.
+      var table = document.getElementById('table');
+      var tbody = table.querySelector('tbody');
+      tbody.innerHTML = '';
+
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var tr = document.createElement('tr');
+
+        for (var j = 0; j < row.length; j++) {
+          var cell = row[j];
+          var temp = document.getElementsByTagName("td")
+          var td = document.createElement('td');
+          td.textContent = cell;
+          if (prev[i][j] != cell) 
+            blinkCell(td);
+          prev[i][j] = row[j]
+          tr.appendChild(td);
+        }
+
+        tbody.appendChild(tr);
+      }
+    };
+
+    function blinkCell(td) {
+        td.classList.toggle('updated')
+        // Set an interval to toggle the class on and off every 500 milliseconds.
+        var interval = setInterval(function() {
+          td.classList.toggle('updated');
+        }, 2000);
+        
+        setTimeout(function() {
+          td.classList.remove('updated');
+          clearInterval(interval);
+        }, 2000);
+    }
+  </script>
+
+  {% set updated = True %}
+  <h2>CSV File Display:</h2>
+  <table border="1" class="dataframe" id='table'>
+    <thead>
+      <tr>
+        <th>id</th><th>gender</th><th>age</th><th>in</th><th>out</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          {% for cell in row %}
+            <td class='updated' {% if updated %}updated{% endif %}>{{ cell|safe }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+
+  <div id="messages"></div>
+</body>
+</html>

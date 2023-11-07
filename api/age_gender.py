@@ -22,8 +22,8 @@ predictor = Model(inputs = model.get_layer('global_max_pooling2d').output, outpu
 # predictor.summary()
 
 def predict(feature):
-    print(feature.shape)
-    age_pred, race_pred, gender_pred = predictor.predict(feature, verbose=False)
+    # print(feature.shape)
+    age_pred, race_pred, gender_pred = predictor.predict(feature, verbose=0)
     
     gender_pred = gender_pred.argmax(axis=-1)
     age_pred = age_pred * max_age
@@ -35,16 +35,17 @@ def get_feature(img):
     preprocessed_input = preprocessed_input[np.newaxis, ...] # shape (1, 198, 198, 3)
     preprocessed_input = np.array(preprocessed_input) / 255.0
     # print(preprocessed_input.shape)
-    feature = feature_extractor.predict(preprocessed_input, verbose=False)
-    print(feature.shape)
+    feature = feature_extractor.predict(preprocessed_input, verbose=0)
+    # print(feature.shape)
     return feature
 
-def already_in(feature):
-    # for root, dirs, files in os.walk(save_dir):
-    #     for file in files:
-    #         f = os.path.join(root, file)
-    #         temp = np.load(f)
-    #         dis.append(distance(feature, temp))
-    #         if (dis < SIMILAR_THRESHOLD):
-    #             return True
-    return False
+def get_id(feature):
+    for root, dirs, files in os.walk(save_dir):
+        for file in files:
+            f = os.path.join(root, file)
+            temp = np.load(f)
+            if (distance(feature, temp) == 0):
+                temp = file.find('_')
+                id = file[:temp]
+                return id
+    return None

@@ -17,7 +17,7 @@ from check_csv_update import check_csv_update
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-upload_dir = 'X:/ANHTAI/camera_system/api/uploads'
+upload_dir = 'uploads'
 
 
 
@@ -102,7 +102,7 @@ async def data(websocket: WebSocket):
     while True:
         print('called')
         # Get the CSV file path.
-        csv_file_path = "X:/ANHTAI/camera_system/data/log.csv"
+        csv_file_path = "data/log.csv"
 
         while not check_csv_update(csv_file_path):
             await asyncio.sleep(1)

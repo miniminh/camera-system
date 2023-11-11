@@ -10,7 +10,7 @@ from age_gender import get_id, check_was_in
 
 
 live_cap = cv2.VideoCapture(video_path)
-camera = cv2.VideoCapture('X:/ANHTAI/camera_system/api/uploads/ezin.mp4', cv2.CAP_DSHOW)
+camera = cv2.VideoCapture('uploads/ezin.mp4', cv2.CAP_DSHOW)
 
 track_history = defaultdict(lambda: [])
     
@@ -71,6 +71,7 @@ while live_cap.isOpened():
                             if dis < SIMILAR_THRESHOLD:
                                 temp.append(dis)
                         print(len(temp))
+                        print(temp)
                         if len(temp) == 0: 
                             print("i don't know who just went out")
                             continue

@@ -63,29 +63,29 @@ def log(id, gender, age, is_in):
     else:
         time_out = dt_string
     
-    with open('X:/ANHTAI/camera_system/data/log.csv', 'a', newline='') as csv_file:
+    with open('data/log.csv', 'a', newline='') as csv_file:
         csv_writer = csv.writer(csv_file)
         csv_writer.writerow([id, gender, age, time_in, time_out])
 
 
-csv_file = open('X:/ANHTAI/camera_system/data/log.csv', 'w', newline='')
+csv_file = open('data/log.csv', 'w', newline='')
 csv_writer = csv.writer(csv_file)
 header = ['id', 'gender', 'age', 'in', 'out']
 csv_writer.writerow(header)
 csv_file.close()
 
-save_dir = 'X:/ANHTAI/camera_system/save/'
+save_dir = 'save/'
 
 THRESHOLD = 0.5
 
 # IM_W = 1600
 # IM_H = 1200
 
-# IM_W = 1920
-# IM_H = 1080
+IM_W = 1920
+IM_H = 1080
 
-IM_W = 720
-IM_H = 480
+# IM_W = 720
+# IM_H = 480
 
 THRESHOLD1 = THRESHOLD * IM_W
 
@@ -93,14 +93,14 @@ THRESHOLD2 = THRESHOLD1 + 10
 
 FACE_W = FACE_H = 198
 
-checkpoint_path = 'X:/ANHTAI/camera_system/model_checkpoint'
+checkpoint_path = 'model_checkpoint'
 
 max_age = 64
 
 ONLY_ALLOW_ONCE = True
 
-SIMILAR_THRESHOLD = 10
+SIMILAR_THRESHOLD = 12
 
 video_path = 0
-# video_path = "X:/ANHTAI/camera_system/test_case/street.mp4"
+# video_path = "test_case/street.mp4"
 # video_path = "http://admin:admin@192.168.88.236:8081/video"

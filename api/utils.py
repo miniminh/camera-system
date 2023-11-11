@@ -97,10 +97,10 @@ checkpoint_path = 'X:/ANHTAI/camera_system/model_checkpoint'
 
 max_age = 64
 
-
+ONLY_ALLOW_ONCE = True
 
 SIMILAR_THRESHOLD = 10
 
 video_path = 0
 # video_path = "X:/ANHTAI/camera_system/test_case/street.mp4"
-# video_path = "http://admin:admin@192.168.88.235:8081/video"
+# video_path = "http://admin:admin@192.168.88.236:8081/video"

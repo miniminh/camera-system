@@ -93,10 +93,6 @@ async def upload(video: UploadFile = File(...), gender = Form(...)):
 @app.get('/video_feed')
 def video_feed():
     return StreamingResponse(gen_frames(), media_type='multipart/x-mixed-replace; boundary=frame')
-
-async def send_csv_data_to_client(client, csv_data):
-    """Sends CSV data to a WebSocket client."""
-
     
 
 @app.websocket("/ws_data")

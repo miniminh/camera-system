@@ -19,7 +19,7 @@ feature_extractor = Model(inputs = model.input, outputs = model.get_layer('globa
 
 predictor = Model(inputs = model.get_layer('global_max_pooling2d').output, outputs = model.output)
 
-# predictor.summary()
+predictor.summary()
 
 def predict(feature):
     # print(feature.shape)
@@ -45,6 +45,19 @@ def get_id(feature):
             f = os.path.join(root, file)
             temp = np.load(f)
             if (distance(feature, temp) == 0):
+                temp = file.find('_')
+                id = file[:temp]
+                return id
+    return None
+
+def check_was_in(feature):
+    for root, dirs, files in os.walk(save_dir):
+        for file in files:
+            f = os.path.join(root, file)
+            temp = np.load(f)
+            dis = distance(feature, temp)
+            print(dis)
+            if (dis < SIMILAR_THRESHOLD):
                 temp = file.find('_')
                 id = file[:temp]
                 return id

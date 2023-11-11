@@ -4,9 +4,9 @@ import time
 import numpy as np
 
 from object_detection import track, check_pass, save
-from utils import IM_H, IM_W, log, csv_file, distance, video_path
+from utils import IM_H, IM_W, log, csv_file, distance, video_path, ONLY_ALLOW_ONCE, SIMILAR_THRESHOLD
 from choose import make_choice
-from age_gender import get_id
+from age_gender import get_id, check_was_in
 
 
 live_cap = cv2.VideoCapture(video_path)
@@ -47,18 +47,19 @@ while live_cap.isOpened():
             
             for box, track_id in zip(boxes, track_ids):
                 is_pass, is_in = check_pass(box, track_id, track_history)
-                
                 if is_pass:
                     
                     track_history[track_id].clear()
                      
                     # if right to left is in 
-                    is_in = not is_in
+                    # is_in = not is_in
                     
-                    id, age, gender, feature = save(box, frame, is_in)
-                    
+                    id, age, gender, feature = save(box, frame, is_in)          
                     
                     if is_in:
+                        if id == None: 
+                            print('already in')
+                            continue
                         people.append([age, gender, feature])
                         cnt_gender[gender] += 1
                         cnt_in += 1
@@ -66,8 +67,13 @@ while live_cap.isOpened():
                     elif cnt_in - cnt_out > 0:
                         temp = [] 
                         for person in people: 
-                            temp.append(distance(person[-1], feature))
-                        
+                            dis = distance(person[-1], feature)
+                            if dis < SIMILAR_THRESHOLD:
+                                temp.append(dis)
+                        print(len(temp))
+                        if len(temp) == 0: 
+                            print("i don't know who just went out")
+                            continue
                         out_person = np.argmin(temp)
                         out_feature = people[out_person][-1]
                         id = get_id(out_feature)

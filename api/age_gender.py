@@ -2,16 +2,15 @@ from keras.models import Model
 from keras.layers import Input, Dense, BatchNormalization, Conv2D, MaxPool2D, GlobalMaxPool2D, Dropout
 from keras.optimizers import SGD
 from keras.callbacks import ModelCheckpoint
+import tensorflow as tf
 import numpy as np
 import os
 
-from model import create_model
+
 from utils import SIMILAR_THRESHOLD, checkpoint_path, max_age, save_dir, distance
 from preprocess import preprocess
 
-model = create_model()
-
-model.load_weights(checkpoint_path)
+model = tf.keras.models.load_model(checkpoint_path)
 
 feature_extractor = Model(inputs = model.input, outputs = model.get_layer('global_max_pooling2d').output)
 
@@ -19,7 +18,7 @@ feature_extractor = Model(inputs = model.input, outputs = model.get_layer('globa
 
 predictor = Model(inputs = model.get_layer('global_max_pooling2d').output, outputs = model.output)
 
-predictor.summary()
+# predictor.summary()
 
 def predict(feature):
     # print(feature.shape)

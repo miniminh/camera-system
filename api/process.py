@@ -6,10 +6,10 @@ from object_detection import track, check_pass, save
 from utils import IM_H, IM_W, log, csv_file
 
 video_path = 0
-video_path = "X:/ANHTAI/camera_system/test_case/test_case.mp4"
+video_path = "test_case/test_case.mp4"
 # video_path = "http://admin:admin@192.168.:8081/video"
 # video_path = "one_person.webm"
-# video_path = "X:/ANHTAI/camera_system/test_case/street.mp4"
+# video_path = "test_case/street.mp4"
 # video_path = "http://192.168.89.112:14204/video"
 cap = cv2.VideoCapture(video_path)
 

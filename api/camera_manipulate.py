@@ -1,7 +1,7 @@
 import os
 import time
 
-upload_dir = 'X:/ANHTAI/camera_system/api/uploads/'
+upload_dir = 'uploads/'
 
 def get_gender():
     with open('camera/camera.txt', 'r') as f:

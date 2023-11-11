@@ -1,19 +1,23 @@
 import cv2
 import uvicorn
 import os
+import json
 import time
-from fastapi import FastAPI, Request, status, Form
+import asyncio
+from fastapi import FastAPI, Request, status, Form, BackgroundTasks, WebSocket
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import StreamingResponse, RedirectResponse
+from fastapi.responses import StreamingResponse, RedirectResponse, JSONResponse, HTMLResponse
 from fastapi import FastAPI, File, UploadFile, Request
 import shutil
 
 from camera_manipulate import get_cam, get_gender
+from utils import get_csv_headers, get_csv_rows
+from check_csv_update import check_csv_update
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-upload_dir = 'X:/ANHTAI/camera_system/api/uploads'
+upload_dir = 'uploads'
 
 
 
@@ -28,7 +32,7 @@ def gen_frames():
             time.sleep(1)
         if new_gender != gender:
             if gender != 'null':
-                RedirectResponse("http://127.0.0.1:8000/play", status_code=status.HTTP_303_SEE_OTHER)
+                RedirectResponse("/play", status_code=status.HTTP_303_SEE_OTHER)
             gender = new_gender
             camera = next(cam_gen)
             cap = cv2.VideoCapture(camera)
@@ -69,7 +73,7 @@ def change():
         camera = 'male'
     with open('camera/camera.txt', 'w') as f:
         f.write(camera)
-    return RedirectResponse("http://127.0.0.1:8000/play", status_code=status.HTTP_303_SEE_OTHER)
+    return RedirectResponse("/play", status_code=status.HTTP_303_SEE_OTHER)
 
 @app.get('/play')
 def play(request: Request):
@@ -84,11 +88,39 @@ async def upload(video: UploadFile = File(...), gender = Form(...)):
     
     with open(f"uploads/{gender}/{video.filename}", "wb") as buffer:
         shutil.copyfileobj(video.file, buffer)
-    return RedirectResponse("http://127.0.0.1:8000/list", status_code=status.HTTP_303_SEE_OTHER)
+    return RedirectResponse("/list", status_code=status.HTTP_303_SEE_OTHER)
 
 @app.get('/video_feed')
 def video_feed():
     return StreamingResponse(gen_frames(), media_type='multipart/x-mixed-replace; boundary=frame')
+    
+
+@app.websocket("/ws_data")
+async def data(websocket: WebSocket):
+    """Displays a CSV file."""
+    await websocket.accept()
+    while True:
+        print('called')
+        # Get the CSV file path.
+        csv_file_path = "data/log.csv"
+
+        while not check_csv_update(csv_file_path):
+            await asyncio.sleep(1)
+
+        # Get the list of headers and rows from the CSV file.
+        rows = get_csv_rows(csv_file_path)
+        json_rows = json.dumps(rows)
+
+        # Send the JSON string to the websocket.    
+        await websocket.send_text(json_rows)
+        # Pass the headers and rows to the HTML template.
+        # await websocket.send_text(f'{headers}, {rows}')
+        # await websocket.send_text(templates.TemplateResponse("data.html", {"request": request, "headers": headers, "rows": rows}))
+
+@app.get("/data")
+async def get_csv_data(request: Request):
+    return templates.TemplateResponse("data.html", {"request": request})
+
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    uvicorn.run('app:app', host='0.0.0.0', port=8000, reload=True)

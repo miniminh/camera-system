@@ -7,7 +7,7 @@ from utils import save_dir
 SAVE_TIME = 60 # minutes
 
 def timeout(filedate):
-    now = datetime.now() - timedelta(0, 1 * 60)
+    now = datetime.now() - timedelta(0, 10 * 60)
     return now > filedate
 
 

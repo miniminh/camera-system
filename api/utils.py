@@ -99,7 +99,7 @@ max_age = 64
 
 ONLY_ALLOW_ONCE = True
 
-SIMILAR_THRESHOLD = 12
+SIMILAR_THRESHOLD = 0.8
 
 video_path = 0
 # video_path = "test_case/street.mp4"

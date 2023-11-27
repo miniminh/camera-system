@@ -34,15 +34,15 @@ def save(box, frame, is_in):
     crop_frame = frame[Y1:Y2, X1:X2]
     
     feature = get_feature(crop_frame)
+    print('------------------------')
     if is_in: 
         if ONLY_ALLOW_ONCE:
             id = check_was_in(feature)
             if id != None: 
-                return None, None, None, feature
+                return None, feature
         id, filename = generate_temp_filename()
         filename = save_dir + filename
-        np.save(filename, feature)
-        age, gender = predict(feature)
-        return id, age, gender, feature
+        np.save(filename, feature.detach().numpy())
+        return id, feature
     else:
-        return None, None, None, feature
+        return None, feature

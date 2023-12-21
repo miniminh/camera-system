@@ -77,7 +77,7 @@ def get_id(feature):
             temp = torch.Tensor(temp)
             similarity = torch.nn.functional.cosine_similarity(temp, feature).item()
             print(similarity)
-            if similarity == 1:
+            if abs(similarity - 1) < 0.000001:
                 temp = file.find('_')
                 id = file[:temp]
                 return id

@@ -103,4 +103,4 @@ SIMILAR_THRESHOLD = 0.8
 
 video_path = 0
 # video_path = "test_case/street.mp4"
-# video_path = "http://admin:admin@192.168.88.236:8081/video"
+# video_path = "http://admin:admin@192.168.89.169:8081/video"

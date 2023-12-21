@@ -76,6 +76,7 @@ while live_cap.isOpened():
                         if chosen is None: 
                             print("i don't know who just went out")
                             continue
+                        print(chosen.item())
                         id = get_id(chosen)
                         print(f'a person just went out')
                         index = people.index(chosen)
